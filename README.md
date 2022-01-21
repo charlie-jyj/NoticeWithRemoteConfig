@@ -41,3 +41,59 @@
 
 
 ### 3) 새롭게 알게 된 것
+
+- alert view 를 customize 하기 위해 Xib 파일 생성 후 controller 를 생성할 때 args로 전달
+```swift
+NoticeViewController(nibName: "NoticeViewController", bundle: .main)
+```
+
+- 뷰 전환 애니메이션
+    - UIModalTransitionStyle
+        - .convertVertical:  아래에서 위로 올라오는 전환
+        - .crrossDissolve: 뷰가 점점 투명해지면서 자연스러운 전환
+        - .flipHorizontal: 수직 축을 기준으로 회전
+        - .particalCurl: 페이지 넘기듯 전환
+    - UIModalPresentationStyle
+        - .currentContext : 현재 뷰의 크기에 따라 대응되서 띄움
+        - .fullScreen
+        - .overCurrentContext
+        - .overFullScreen : 아래에 기존의 뷰가 보이면서 위에 새로운 화면이 뜸
+        - .formSheet
+        - .pageSheet
+        - .popover
+
+- replacingOccurrences(of:with:)
+    - returns a new string in which all occurrences of a target string in the receiver are replaced by another given string
+    - target: the string to replace
+    - replacement: the string with which to replace target
+
+- A/B testing 하면서 특정 이벤트 발생시 Google Analytics가 observe 하게
+```swift
+let confirmAction = UIAlertAction(title: "확인", style: .default) {
+                // Google Analytics
+                _ in
+                Analytics.logEvent("promotion_alert", parameters: nil)
+            }
+```
+
+- Google Analytics debug view를 Xcode에서 사용하기
+1. Xcode 에서 Product > Scheme > Run Arguments
+2. “-FIRDebugEnabled” 추가
+https://fredriccliver.medium.com/how-to-activate-firebase-analytics-debug-view-in-xcode-f557fc299b28
+
+- Firebase가 기기에 부여하는 auth Token 값 확인하기
+```swift
+Installations.installations().authTokenForcingRefresh(true) {
+            result, error in
+            if let error = error {
+                print("ERROR")
+                return
+            }
+            
+            guard let result = result else { return }
+            print("Installation auth token: \(result.authToken)")
+        }
+```
+
+- A/B 테스트에서 테스트 기기 관리 통해 테스트 기기의 특정 변수를 테스트 할 수 있다
+    - 이를 위해서 위의 auth Token 값 사용할 것
